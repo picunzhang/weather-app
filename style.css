@@ -16,10 +16,11 @@
     --color-green: #43A047;
     --color-blue: #1976D2;
     --text-primary: #FFFFFF;
-    --text-secondary: rgba(255, 255, 255, 0.6);
-    --text-dim: rgba(255, 255, 255, 0.38);
-    --card-bg: rgba(255, 255, 255, 0.08);
-    --card-border: rgba(255, 255, 255, 0.15);
+    --text-secondary: rgba(255, 255, 255, 0.85);
+    --text-dim: rgba(255, 255, 255, 0.6);
+    --card-bg: #000000;
+    --card-border: #FFFFFF;
+    --card-bg-alt: rgba(255, 255, 255, 0.15);
     --radius-lg: 20px;
     --radius-md: 14px;
     --radius-sm: 10px;
@@ -90,8 +91,8 @@ body {
 .loader-text {
     font-family: var(--font-body);
     font-size: 14px;
-    font-weight: 500;
-    color: var(--text-secondary);
+    font-weight: 600;
+    color: var(--color-white);
     letter-spacing: 0.5px;
 }
 
@@ -129,23 +130,24 @@ body {
     width: 36px;
     height: 36px;
     border-radius: 10px;
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    color: var(--text-primary);
+    background: var(--color-black);
+    border: 2px solid var(--color-white);
+    color: var(--color-white);
 }
 
 .location-name {
     font-family: var(--font-display);
     font-size: 22px;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.2;
     letter-spacing: -0.5px;
 }
 
 .location-meta {
     font-size: 11px;
-    color: var(--text-dim);
+    color: var(--text-secondary);
     margin-top: 1px;
+    font-weight: 500;
 }
 
 .topbar-right {
@@ -155,7 +157,7 @@ body {
 .clock {
     font-family: var(--font-display);
     font-size: 24px;
-    font-weight: 300;
+    font-weight: 600;
     letter-spacing: 1px;
     font-variant-numeric: tabular-nums;
 }
@@ -167,20 +169,22 @@ body {
     justify-content: flex-end;
     margin-top: 2px;
     font-size: 11px;
-    color: var(--text-dim);
+    color: var(--text-secondary);
+    font-weight: 500;
 }
 
 .pulse-dot {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: var(--color-green);
+    border: 1px solid var(--color-white);
 }
 
 /* ===== 英雄区 ===== */
 .hero {
     background: var(--card-bg);
-    border: 1px solid var(--card-border);
+    border: 2px solid var(--card-border);
     border-radius: var(--radius-lg);
     padding: 18px 26px;
     flex-shrink: 0;
@@ -205,7 +209,7 @@ body {
 .temp-value {
     font-family: var(--font-display);
     font-size: 72px;
-    font-weight: 200;
+    font-weight: 700;
     line-height: 0.9;
     letter-spacing: -3px;
     font-variant-numeric: tabular-nums;
@@ -214,9 +218,9 @@ body {
 .temp-unit {
     font-family: var(--font-display);
     font-size: 40px;
-    font-weight: 200;
+    font-weight: 700;
     margin-top: 4px;
-    color: var(--text-secondary);
+    color: var(--color-yellow);
 }
 
 .hero-desc {
@@ -229,12 +233,13 @@ body {
 .weather-label {
     font-family: var(--font-display);
     font-size: 20px;
-    font-weight: 500;
+    font-weight: 700;
 }
 
 .feels-like {
     font-size: 14px;
     color: var(--text-secondary);
+    font-weight: 600;
 }
 
 .hero-stats {
@@ -249,8 +254,8 @@ body {
     align-items: center;
     gap: 8px;
     padding: 10px 12px;
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
+    background: var(--color-black);
+    border: 2px solid var(--card-border);
     border-radius: var(--radius-sm);
 }
 
@@ -267,15 +272,16 @@ body {
 .stat-value {
     font-family: var(--font-display);
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 700;
     line-height: 1.2;
     font-variant-numeric: tabular-nums;
 }
 
 .stat-label {
     font-size: 10px;
-    color: var(--text-dim);
+    color: var(--text-secondary);
     margin-top: 2px;
+    font-weight: 600;
 }
 
 /* ===== 底部双栏布局 ===== */
@@ -324,12 +330,14 @@ body {
 .section-title {
     font-family: var(--font-display);
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
+    color: var(--color-yellow);
 }
 
 .section-sub {
     font-size: 12px;
-    color: var(--text-dim);
+    color: var(--text-secondary);
+    font-weight: 600;
 }
 
 /* ===== 逐小时预报 ===== */
@@ -356,23 +364,23 @@ body {
     gap: 6px;
     padding: 12px 6px;
     background: var(--card-bg);
-    border: 1px solid var(--card-border);
+    border: 2px solid var(--card-border);
     border-radius: var(--radius-md);
 }
 
 .hour-card.now {
-    background: rgba(255, 255, 255, 0.18);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: var(--color-white);
+    border-color: var(--color-white);
 }
 
 .hour-time {
     font-size: 12px;
     color: var(--text-secondary);
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .hour-card.now .hour-time {
-    color: var(--text-primary);
+    color: var(--color-black);
 }
 
 .hour-icon {
@@ -383,15 +391,23 @@ body {
 .hour-temp {
     font-family: var(--font-display);
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
+}
+
+.hour-card.now .hour-temp {
+    color: var(--color-black);
 }
 
 .hour-precip {
     font-size: 10px;
-    color: var(--color-blue);
+    color: var(--color-yellow);
     height: 14px;
-    font-weight: 600;
+    font-weight: 700;
+}
+
+.hour-card.now .hour-precip {
+    color: var(--color-blue);
 }
 
 .hour-precip.zero {
@@ -416,20 +432,25 @@ body {
     gap: 14px;
     padding: 16px 18px;
     background: var(--card-bg);
-    border: 1px solid var(--card-border);
+    border: 2px solid var(--card-border);
     border-radius: var(--radius-md);
+}
+
+.daily-card:first-child {
+    border-color: var(--color-yellow);
 }
 
 .daily-day {
     font-family: var(--font-display);
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .daily-day-sub {
     font-size: 12px;
-    color: var(--text-dim);
+    color: var(--text-secondary);
     margin-top: 2px;
+    font-weight: 600;
 }
 
 .daily-icon {
@@ -445,17 +466,18 @@ body {
 
 .daily-min {
     font-size: 14px;
-    color: var(--text-dim);
+    color: var(--text-secondary);
     font-variant-numeric: tabular-nums;
     width: 32px;
     text-align: right;
+    font-weight: 700;
 }
 
 .daily-bar {
     flex: 1;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
+    height: 8px;
+    background: var(--color-white);
+    border-radius: 4px;
     overflow: hidden;
     position: relative;
 }
@@ -463,27 +485,28 @@ body {
 .daily-bar-fill {
     position: absolute;
     height: 100%;
-    border-radius: 3px;
+    border-radius: 4px;
     background: var(--color-orange);
 }
 
 .daily-max {
     font-family: var(--font-display);
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
     width: 32px;
+    color: var(--color-yellow);
 }
 
 .daily-precip {
     text-align: right;
     font-size: 13px;
-    color: var(--color-blue);
-    font-weight: 600;
+    color: var(--color-yellow);
+    font-weight: 700;
 }
 
 .daily-precip.zero {
-    opacity: 0.3;
+    opacity: 0.4;
     color: var(--text-dim);
 }
 
@@ -500,7 +523,7 @@ body {
     gap: 24px;
     padding: 18px 22px;
     background: var(--card-bg);
-    border: 1px solid var(--card-border);
+    border: 2px solid var(--card-border);
     border-radius: var(--radius-lg);
     flex: 1;
 }
@@ -528,14 +551,16 @@ body {
 
 .sun-label {
     font-size: 11px;
-    color: var(--text-dim);
+    color: var(--text-secondary);
+    font-weight: 600;
 }
 
 .sun-time {
     font-family: var(--font-display);
     font-size: 17px;
-    font-weight: 500;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
+    color: var(--color-yellow);
 }
 
 .sun-arc {
@@ -557,10 +582,10 @@ body {
     z-index: 200;
     padding: 12px 20px;
     background: var(--color-red);
-    border: 1px solid var(--color-red);
+    border: 2px solid var(--color-white);
     border-radius: 12px;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 700;
     color: var(--color-white);
     max-width: 90vw;
 }
