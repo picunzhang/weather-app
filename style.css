@@ -6,8 +6,8 @@
 }
 
 :root {
-    --font-display: 'Bricolage Grotesque', serif;
-    --font-body: 'Manrope', sans-serif;
+    --font-display: 'Bricolage Grotesque', 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', sans-serif;
+    --font-body: 'Manrope', 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', sans-serif;
     --color-black: #000000;
     --color-white: #FFFFFF;
     --color-red: #E53935;
