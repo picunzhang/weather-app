@@ -6,8 +6,8 @@
 }
 
 :root {
-    --font-display: 'Bricolage Grotesque', serif;
-    --font-body: 'Manrope', sans-serif;
+    --font-display: 'Bricolage Grotesque', 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', sans-serif;
+    --font-body: 'Manrope', 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', sans-serif;
     --color-black: #000000;
     --color-white: #FFFFFF;
     --color-red: #E53935;
@@ -15,26 +15,20 @@
     --color-yellow: #FDD835;
     --color-green: #43A047;
     --color-blue: #1976D2;
-    --text-primary: #FFFFFF;
-    --text-secondary: rgba(255, 255, 255, 0.85);
-    --text-dim: rgba(255, 255, 255, 0.6);
-    --text-on-white: #000000;
-    --text-on-white-secondary: rgba(0, 0, 0, 0.7);
-    --card-bg: #000000;
-    --card-border: #000000;
-    --radius-lg: 20px;
-    --radius-md: 14px;
-    --radius-sm: 10px;
+    --radius-lg: 8px;
+    --radius-md: 5px;
+    --radius-sm: 3px;
 }
 
 html, body {
+    width: 100%;
     height: 100%;
     overflow: hidden;
 }
 
 body {
     font-family: var(--font-body);
-    color: var(--text-on-white);
+    color: var(--color-black);
     background: var(--color-white);
     display: flex;
     align-items: center;
@@ -43,26 +37,25 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===== 5:3 固定比例框架 ===== */
+/* ===== 800×480 固定框架 ===== */
 .frame {
-    width: 100vw;
-    height: 100vh;
-    max-width: calc(100vh * 5 / 3);
-    max-height: calc(100vw * 3 / 5);
-    aspect-ratio: 5 / 3;
+    width: 800px;
+    height: 480px;
+    max-width: 100%;
+    max-height: 100%;
     position: relative;
     overflow: hidden;
+    background: var(--color-white);
 }
 
-/* ===== 静态背景层 ===== */
+/* ===== 静态背景层（纯白） ===== */
 .bg-layer {
     position: absolute;
     inset: 0;
     z-index: 0;
-    overflow: hidden;
+    background: var(--color-white);
 }
 
-/* 天气主题背景（纯白） */
 .theme-clear-day,
 .theme-clear-night,
 .theme-cloudy-day,
@@ -83,7 +76,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 16px;
+    gap: 8px;
     background: var(--color-white);
 }
 
@@ -92,11 +85,9 @@ body {
 }
 
 .loader-text {
-    font-family: var(--font-body);
-    font-size: 14px;
+    font-size: 10px;
     font-weight: 700;
     color: var(--color-black);
-    letter-spacing: 0.5px;
 }
 
 /* ===== 主容器 ===== */
@@ -105,11 +96,10 @@ body {
     z-index: 1;
     width: 100%;
     height: 100%;
-    margin: 0 auto;
-    padding: 20px 28px;
+    padding: 8px 12px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 5px;
 }
 
 /* ===== 顶部导航 ===== */
@@ -118,40 +108,45 @@ body {
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
+    height: 22px;
 }
 
 .topbar-left {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
 }
 
 .location-pin {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
     background: var(--color-black);
-    border: 2px solid var(--color-black);
     color: var(--color-white);
+}
+
+.location-pin svg {
+    width: 10px;
+    height: 10px;
 }
 
 .location-name {
     font-family: var(--font-display);
-    font-size: 22px;
+    font-size: 13px;
     font-weight: 700;
-    line-height: 1.2;
-    letter-spacing: -0.5px;
+    line-height: 1.1;
+    letter-spacing: -0.3px;
     color: var(--color-black);
 }
 
 .location-meta {
-    font-size: 11px;
-    color: var(--text-on-white-secondary);
+    font-size: 7px;
+    color: var(--color-blue);
+    font-weight: 600;
     margin-top: 1px;
-    font-weight: 500;
 }
 
 .topbar-right {
@@ -160,9 +155,9 @@ body {
 
 .clock {
     font-family: var(--font-display);
-    font-size: 24px;
+    font-size: 14px;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     font-variant-numeric: tabular-nums;
     color: var(--color-black);
 }
@@ -170,17 +165,17 @@ body {
 .refresh-info {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 3px;
     justify-content: flex-end;
-    margin-top: 2px;
-    font-size: 11px;
-    color: var(--text-on-white-secondary);
+    margin-top: 1px;
+    font-size: 7px;
+    color: var(--color-blue);
     font-weight: 600;
 }
 
 .pulse-dot {
-    width: 7px;
-    height: 7px;
+    width: 5px;
+    height: 5px;
     border-radius: 50%;
     background: var(--color-green);
     border: 1px solid var(--color-black);
@@ -188,21 +183,21 @@ body {
 
 /* ===== 英雄区 ===== */
 .hero {
-    background: var(--card-bg);
-    border: 2px solid var(--card-border);
+    background: var(--color-black);
+    border: 2px solid var(--color-black);
     border-radius: var(--radius-lg);
-    padding: 18px 26px;
+    padding: 6px 10px;
     flex-shrink: 0;
 }
 
 .hero-main {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
 }
 
 .hero-icon {
-    font-size: 52px;
+    font-size: 22px;
     line-height: 1;
 }
 
@@ -213,61 +208,60 @@ body {
 
 .temp-value {
     font-family: var(--font-display);
-    font-size: 72px;
+    font-size: 32px;
     font-weight: 700;
     line-height: 0.9;
-    letter-spacing: -3px;
+    letter-spacing: -1px;
     font-variant-numeric: tabular-nums;
     color: var(--color-white);
 }
 
 .temp-unit {
     font-family: var(--font-display);
-    font-size: 40px;
+    font-size: 18px;
     font-weight: 700;
-    margin-top: 4px;
+    margin-top: 2px;
     color: var(--color-red);
 }
 
 .hero-desc {
     display: flex;
     align-items: baseline;
-    gap: 14px;
+    gap: 8px;
     margin-left: auto;
 }
 
 .weather-label {
     font-family: var(--font-display);
-    font-size: 20px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--color-white);
 }
 
 .feels-like {
-    font-size: 14px;
-    color: var(--text-secondary);
+    font-size: 9px;
+    color: var(--color-yellow);
     font-weight: 600;
 }
 
 .hero-stats {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    gap: 8px;
-    margin-top: 14px;
+    gap: 3px;
+    margin-top: 4px;
 }
 
 .stat-chip {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 12px;
-    background: var(--color-black);
-    border: 2px solid var(--color-black);
+    gap: 3px;
+    padding: 3px 4px;
+    background: var(--color-white);
     border-radius: var(--radius-sm);
 }
 
 .stat-icon {
-    font-size: 20px;
+    font-size: 11px;
     flex-shrink: 0;
 }
 
@@ -278,24 +272,24 @@ body {
 
 .stat-value {
     font-family: var(--font-display);
-    font-size: 16px;
+    font-size: 10px;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.1;
     font-variant-numeric: tabular-nums;
-    color: var(--color-white);
+    color: var(--color-black);
 }
 
 .stat-label {
-    font-size: 10px;
-    color: var(--text-dim);
-    margin-top: 2px;
+    font-size: 7px;
+    color: var(--color-blue);
     font-weight: 600;
+    margin-top: 1px;
 }
 
 /* ===== 底部双栏布局 ===== */
 .bottom-section {
     display: flex;
-    gap: 14px;
+    gap: 5px;
     flex: 1;
     min-height: 0;
 }
@@ -304,16 +298,15 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 5px;
     min-width: 0;
 }
 
 .bottom-right {
-    width: 360px;
+    width: 220px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
 }
 
 /* ===== 区块通用 ===== */
@@ -330,21 +323,21 @@ body {
 .section-header {
     display: flex;
     align-items: baseline;
-    gap: 10px;
-    margin-bottom: 8px;
+    gap: 5px;
+    margin-bottom: 3px;
     flex-shrink: 0;
 }
 
 .section-title {
     font-family: var(--font-display);
-    font-size: 16px;
+    font-size: 10px;
     font-weight: 700;
     color: var(--color-red);
 }
 
 .section-sub {
-    font-size: 12px;
-    color: var(--text-on-white-secondary);
+    font-size: 7px;
+    color: var(--color-blue);
     font-weight: 600;
 }
 
@@ -358,7 +351,7 @@ body {
 
 .hourly-track {
     display: flex;
-    gap: 8px;
+    gap: 3px;
     width: 100%;
 }
 
@@ -369,21 +362,21 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 12px 6px;
+    gap: 2px;
+    padding: 5px 2px;
     background: var(--color-black);
-    border: 2px solid var(--color-black);
+    border: 1px solid var(--color-black);
     border-radius: var(--radius-md);
 }
 
 .hour-card.now {
     background: var(--color-yellow);
-    border-color: var(--color-black);
+    border: 2px solid var(--color-black);
 }
 
 .hour-time {
-    font-size: 12px;
-    color: var(--text-secondary);
+    font-size: 7px;
+    color: var(--color-white);
     font-weight: 700;
 }
 
@@ -392,13 +385,13 @@ body {
 }
 
 .hour-icon {
-    font-size: 28px;
+    font-size: 14px;
     line-height: 1;
 }
 
 .hour-temp {
     font-family: var(--font-display);
-    font-size: 18px;
+    font-size: 11px;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     color: var(--color-white);
@@ -409,9 +402,9 @@ body {
 }
 
 .hour-precip {
-    font-size: 10px;
+    font-size: 7px;
     color: var(--color-yellow);
-    height: 14px;
+    height: 9px;
     font-weight: 700;
 }
 
@@ -420,14 +413,14 @@ body {
 }
 
 .hour-precip.zero {
-    opacity: 0;
+    visibility: hidden;
 }
 
 /* ===== 三天预报 ===== */
 .daily-grid {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 4px;
     flex: 1;
     min-height: 0;
     overflow: hidden;
@@ -436,58 +429,58 @@ body {
 .daily-card {
     flex: 1;
     display: grid;
-    grid-template-columns: 80px 40px 1fr 50px;
+    grid-template-columns: 48px 22px 1fr 28px;
     align-items: center;
-    gap: 14px;
-    padding: 16px 18px;
+    gap: 6px;
+    padding: 6px 8px;
     background: var(--color-black);
     border: 2px solid var(--color-black);
     border-radius: var(--radius-md);
 }
 
 .daily-card:first-child {
-    border-color: var(--color-red);
+    border: 2px solid var(--color-red);
 }
 
 .daily-day {
     font-family: var(--font-display);
-    font-size: 16px;
+    font-size: 10px;
     font-weight: 700;
     color: var(--color-white);
 }
 
 .daily-day-sub {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: 2px;
+    font-size: 7px;
+    color: var(--color-yellow);
+    margin-top: 1px;
     font-weight: 600;
 }
 
 .daily-icon {
-    font-size: 32px;
+    font-size: 16px;
     text-align: center;
 }
 
 .daily-range {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 4px;
 }
 
 .daily-min {
-    font-size: 14px;
-    color: var(--text-dim);
+    font-size: 9px;
+    color: var(--color-white);
     font-variant-numeric: tabular-nums;
-    width: 32px;
+    width: 22px;
     text-align: right;
     font-weight: 700;
 }
 
 .daily-bar {
     flex: 1;
-    height: 8px;
+    height: 5px;
     background: var(--color-white);
-    border-radius: 4px;
+    border-radius: 2px;
     overflow: hidden;
     position: relative;
 }
@@ -495,63 +488,59 @@ body {
 .daily-bar-fill {
     position: absolute;
     height: 100%;
-    border-radius: 4px;
+    border-radius: 2px;
     background: var(--color-orange);
 }
 
 .daily-max {
     font-family: var(--font-display);
-    font-size: 16px;
+    font-size: 10px;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
-    width: 32px;
+    width: 22px;
     color: var(--color-red);
 }
 
 .daily-precip {
     text-align: right;
-    font-size: 13px;
+    font-size: 8px;
     color: var(--color-yellow);
     font-weight: 700;
 }
 
 .daily-precip.zero {
-    opacity: 0.4;
-    color: var(--text-dim);
+    visibility: hidden;
 }
 
 /* ===== 日出日落 ===== */
 .sun-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    flex-shrink: 0;
 }
 
 .sun-card {
     display: flex;
     align-items: center;
-    gap: 24px;
-    padding: 18px 22px;
+    gap: 10px;
+    padding: 5px 10px;
     background: var(--color-black);
     border: 2px solid var(--color-black);
-    border-radius: var(--radius-lg);
-    flex: 1;
+    border-radius: var(--radius-md);
 }
 
 .sun-info {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+    flex: 1;
 }
 
 .sun-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 4px;
 }
 
 .sun-icon {
-    font-size: 24px;
+    font-size: 12px;
 }
 
 .sun-item > div {
@@ -560,14 +549,14 @@ body {
 }
 
 .sun-label {
-    font-size: 11px;
-    color: var(--text-dim);
+    font-size: 7px;
+    color: var(--color-white);
     font-weight: 600;
 }
 
 .sun-time {
     font-family: var(--font-display);
-    font-size: 17px;
+    font-size: 11px;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     color: var(--color-yellow);
@@ -575,94 +564,35 @@ body {
 
 .sun-arc {
     flex: 1;
-    max-width: 260px;
+    min-width: 0;
 }
 
 .sun-arc-svg {
     width: 100%;
-    height: auto;
+    height: 100%;
 }
 
 /* ===== 错误提示 ===== */
 .error-toast {
     position: fixed;
-    bottom: 20px;
+    bottom: 8px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 200;
-    padding: 12px 20px;
+    padding: 6px 10px;
     background: var(--color-red);
     border: 2px solid var(--color-black);
-    border-radius: 12px;
-    font-size: 13px;
+    border-radius: 4px;
+    font-size: 9px;
     font-weight: 700;
     color: var(--color-white);
-    max-width: 90vw;
+    max-width: 90%;
 }
 
-/* ===== 响应式 ===== */
-@media (max-aspect-ratio: 5/3) {
+/* ===== 小屏自适应（仅等比缩放） ===== */
+@media (max-width: 800px), (max-height: 480px) {
     .frame {
         width: 100vw;
-        height: calc(100vw * 3 / 5);
-        max-width: none;
-        max-height: none;
-    }
-}
-
-@media (min-aspect-ratio: 5/3) {
-    .frame {
-        width: calc(100vh * 5 / 3);
         height: 100vh;
-        max-width: none;
-        max-height: none;
-    }
-}
-
-@media (max-width: 700px) {
-    .container {
-        padding: 16px 20px;
-        gap: 10px;
-    }
-
-    .bottom-section {
-        flex-direction: column;
-    }
-
-    .bottom-right {
-        width: 100%;
-    }
-
-    .hero-stats {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .temp-value {
-        font-size: 56px;
-    }
-
-    .temp-unit {
-        font-size: 32px;
-    }
-
-    .hero-icon {
-        font-size: 40px;
-    }
-
-    .bottom-left .section-block {
-        flex: 0 0 auto;
-    }
-
-    .hourly-scroll {
-        flex: 0 0 auto;
-    }
-
-    .sun-section {
-        flex: 0 0 auto;
-    }
-
-    .daily-card {
-        flex: 0 0 auto;
-        padding: 12px 14px;
     }
 }
