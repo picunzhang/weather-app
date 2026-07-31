@@ -15,10 +15,6 @@
 <div class="frame">
     <!-- 静态背景层 -->
     <div class="bg-layer" id="bgLayer">
-        <div class="bg-orb bg-orb-1"></div>
-        <div class="bg-orb bg-orb-2"></div>
-        <div class="bg-orb bg-orb-3"></div>
-        <div class="bg-noise"></div>
     </div>
 
     <!-- 加载状态 -->
@@ -143,11 +139,8 @@
                         </div>
                         <div class="sun-arc">
                             <svg viewBox="0 0 300 100" class="sun-arc-svg" id="sunArcSvg">
-                                <path d="M 20 90 Q 150 -20 280 90" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="4 4"/>
-                                <circle id="sunPosition" cx="150" cy="10" r="6" fill="#FFD93D" filter="url(#sunGlow)"/>
-                                <defs>
-                                    <filter id="sunGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-                                </defs>
+                                <path d="M 20 90 Q 150 -20 280 90" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="4 4" opacity="0.2"/>
+                                <circle id="sunPosition" cx="150" cy="10" r="6" fill="#FDD835"/>
                             </svg>
                         </div>
                     </div>
