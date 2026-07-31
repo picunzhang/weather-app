@@ -259,7 +259,7 @@ function renderDaily(data) {
 function updateSunArc(sunriseStr, sunsetStr) {
     const sunEl = document.getElementById('sunPosition');
     if (!sunriseStr || !sunsetStr) {
-        sunEl.setAttribute('visibility', 'hidden');
+        sunEl.setAttribute('opacity', '0');
         return;
     }
 
@@ -268,11 +268,11 @@ function updateSunArc(sunriseStr, sunsetStr) {
     const now = Date.now();
 
     if (now < sunrise || now > sunset) {
-        sunEl.setAttribute('visibility', 'hidden');
+        sunEl.setAttribute('opacity', '0');
         return;
     }
 
-    sunEl.setAttribute('visibility', 'visible');
+    sunEl.setAttribute('opacity', '1');
     const progress = (now - sunrise) / (sunset - sunrise);
 
     const t = progress;
