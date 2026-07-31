@@ -109,7 +109,7 @@ async function getWeather(lat, lon) {
         hourly: 'temperature_2m,weather_code,precipitation_probability,wind_speed_10m',
         daily: 'weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,wind_speed_10m_max,uv_index_max',
         timezone: 'auto',
-        forecast_days: '7'
+        forecast_days: '3'
     });
 
     const resp = await fetch(`${WEATHER_API}?${params}`);
@@ -183,7 +183,7 @@ function renderHourly(data) {
         }
     }
 
-    const count = Math.min(24, times.length - startIdx);
+    const count = Math.min(8, times.length - startIdx);
     for (let i = 0; i < count; i++) {
         const idx = startIdx + i;
         const info = getWeatherInfo(codes[idx]);
