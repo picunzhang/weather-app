@@ -3,10 +3,17 @@
 /* ========================================
    配置常量
    ======================================== */
-const REFRESH_INTERVAL = 60 * 60 * 1000; // 每小时更新一次 (1 小时)
-const IP_API = 'https://ipapi.co/json/';
-const IP_API_FALLBACK = 'https://ipwho.is/';
+const REFRESH_INTERVAL = 60 * 60 * 1000; // 每小时更新一次
 const WEATHER_API = 'https://api.open-meteo.com/v1/forecast';
+
+// 默认位置：上海
+const DEFAULT_LOCATION = {
+    lat: 31.2304,
+    lon: 121.4737,
+    city: '上海',
+    country: 'China',
+    region: 'Shanghai'
+};
 
 /* ========================================
    WMO 天气代码映射
@@ -92,52 +99,6 @@ function showToast(msg) {
 }
 
 /* ========================================
-   IP 定位
-   ======================================== */
-async function getLocationByIP() {
-    // 主服务: ipapi.co
-    try {
-        const resp = await fetch(IP_API);
-        if (!resp.ok) throw new Error('ipapi.co 请求失败');
-        const data = await resp.json();
-        if (data.latitude && data.longitude) {
-            return {
-                lat: data.latitude,
-                lon: data.longitude,
-                city: data.city || data.region || '未知位置',
-                country: data.country_name || '',
-                region: data.region || '',
-                source: 'ipapi.co'
-            };
-        }
-        throw new Error('ipapi.co 返回数据无效');
-    } catch (err) {
-        console.warn('主定位服务失败，尝试备用服务:', err.message);
-    }
-
-    // 备用服务: ipwho.is
-    try {
-        const resp = await fetch(IP_API_FALLBACK);
-        if (!resp.ok) throw new Error('ipwho.is 请求失败');
-        const data = await resp.json();
-        if (data.success === false) throw new Error(data.message || 'ipwho.is 返回失败');
-        if (data.latitude && data.longitude) {
-            return {
-                lat: data.latitude,
-                lon: data.longitude,
-                city: data.city || data.region || '未知位置',
-                country: data.country || '',
-                region: data.region || '',
-                source: 'ipwho.is'
-            };
-        }
-        throw new Error('ipwho.is 返回数据无效');
-    } catch (err) {
-        throw new Error('所有定位服务均不可用: ' + err.message);
-    }
-}
-
-/* ========================================
    获取天气数据 (Open-Meteo)
    ======================================== */
 async function getWeather(lat, lon) {
@@ -169,11 +130,8 @@ function renderCurrent(data, location) {
     document.getElementById('bgLayer').className = `bg-layer theme-${themeName}`;
 
     // 位置
-    const locParts = [location.city];
-    if (location.region && location.region !== location.city) locParts.push(location.region);
-    if (location.country) locParts.push(location.country);
     document.getElementById('locationName').textContent = location.city;
-    document.getElementById('locationMeta').textContent = locParts.filter(Boolean).join(' · ') + ` (来源: ${location.source})`;
+    document.getElementById('locationMeta').textContent = `${location.region}, ${location.country}`;
 
     // 温度
     document.getElementById('currentTemp').textContent = Math.round(c.temperature_2m);
@@ -188,15 +146,13 @@ function renderCurrent(data, location) {
     document.getElementById('pressure').textContent = Math.round(c.surface_pressure);
     document.getElementById('precip').textContent = c.precipitation.toFixed(1);
 
-    // UV 指数 (从daily取当天的最大值)
+    // UV 指数
     const todayUV = data.daily.uv_index_max?.[0];
     document.getElementById('uvIndex').textContent = todayUV ? `${todayUV.toFixed(1)} ${uvLevel(todayUV)}` : '—';
 
     // 日出日落
     const sunrise = data.daily.sunrise?.[0];
     const sunset = data.daily.sunset?.[0];
-    cachedSunrise = sunrise;
-    cachedSunset = sunset;
     document.getElementById('sunrise').textContent = sunrise ? formatTime(sunrise) : '--:--';
     document.getElementById('sunset').textContent = sunset ? formatTime(sunset) : '--:--';
 
@@ -218,17 +174,15 @@ function renderHourly(data) {
     const codes = hourly.weather_code;
     const precipProb = hourly.precipitation_probability;
 
-    // 找到当前小时开始的索引
     let startIdx = 0;
     for (let i = 0; i < times.length; i++) {
         const t = new Date(times[i]);
         if (t >= now) {
-            startIdx = i > 0 ? i - 1 : 0; // 包含当前小时
+            startIdx = i > 0 ? i - 1 : 0;
             break;
         }
     }
 
-    // 渲染未来 24 小时
     const count = Math.min(24, times.length - startIdx);
     for (let i = 0; i < count; i++) {
         const idx = startIdx + i;
@@ -263,7 +217,6 @@ function renderDaily(data) {
     const codes = daily.weather_code;
     const precipMax = daily.precipitation_probability_max || [];
 
-    // 计算全周温度范围用于条形图比例
     const weekMin = Math.min(...minTemps);
     const weekMax = Math.max(...maxTemps);
     const range = weekMax - weekMin || 1;
@@ -274,7 +227,6 @@ function renderDaily(data) {
         const dateStr = formatDateShort(times[i]);
         const precip = precipMax[i] || 0;
 
-        // 温度条位置
         const minPct = ((minTemps[i] - weekMin) / range) * 100;
         const maxPct = ((maxTemps[i] - weekMin) / range) * 100;
         const barLeft = minPct;
@@ -302,7 +254,7 @@ function renderDaily(data) {
 }
 
 /* ========================================
-   太阳弧线位置
+   太阳弧线位置（静态计算一次）
    ======================================== */
 function updateSunArc(sunriseStr, sunsetStr) {
     const sunEl = document.getElementById('sunPosition');
@@ -316,17 +268,13 @@ function updateSunArc(sunriseStr, sunsetStr) {
     const now = Date.now();
 
     if (now < sunrise || now > sunset) {
-        // 夜间 - 太阳在地平线下
         sunEl.setAttribute('opacity', '0');
         return;
     }
 
     sunEl.setAttribute('opacity', '1');
-    const progress = (now - sunrise) / (sunset - sunrise); // 0 → 1
+    const progress = (now - sunrise) / (sunset - sunrise);
 
-    // 弧线路径: M 20 90 Q 150 -20 280 90
-    // 用二次贝塞尔曲线公式计算位置
-    // B(t) = (1-t)² P0 + 2(1-t)t P1 + t² P2
     const t = progress;
     const x = (1 - t) * (1 - t) * 20 + 2 * (1 - t) * t * 150 + t * t * 280;
     const y = (1 - t) * (1 - t) * 90 + 2 * (1 - t) * t * (-20) + t * t * 90;
@@ -335,9 +283,9 @@ function updateSunArc(sunriseStr, sunsetStr) {
 }
 
 /* ========================================
-   时钟
+   时钟（静态显示加载时的时间）
    ======================================== */
-function updateClock() {
+function setClock() {
     const now = new Date();
     document.getElementById('clock').textContent = now.toLocaleTimeString('zh-CN', {
         hour: '2-digit',
@@ -349,59 +297,44 @@ function updateClock() {
 /* ========================================
    主流程
    ======================================== */
+let lastRefreshTime = 0;
+
 async function init() {
     try {
-        // 1. IP 定位
-        const location = await getLocationByIP();
-
-        // 2. 获取天气
+        const location = DEFAULT_LOCATION;
         const weather = await getWeather(location.lat, location.lon);
 
-        // 3. 渲染
         renderCurrent(weather, location);
         renderHourly(weather);
         renderDaily(weather);
 
-        // 4. 显示页面
-        document.getElementById('loader').classList.add('fade-out');
-        setTimeout(() => {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('container').style.display = '';
-        }, 400);
+        document.getElementById('loader').classList.add('hide');
+        document.getElementById('container').style.display = '';
 
-        // 5. 更新时间戳
+        setClock();
         lastRefreshTime = Date.now();
         updateLastRefresh();
 
     } catch (err) {
         console.error('初始化失败:', err);
-        document.getElementById('loader').classList.add('fade-out');
-        setTimeout(() => {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('container').style.display = '';
-        }, 400);
-        showToast('获取天气数据失败: ' + err.message + '。将在下次刷新时重试。');
+        document.getElementById('loader').classList.add('hide');
+        document.getElementById('container').style.display = '';
+        setClock();
+        showToast('获取天气数据失败: ' + err.message);
     }
 }
 
-// 全局状态
-let lastRefreshTime = 0;
-let cachedSunrise = null;
-let cachedSunset = null;
-
 async function refresh() {
     try {
-        const location = await getLocationByIP();
+        const location = DEFAULT_LOCATION;
         const weather = await getWeather(location.lat, location.lon);
         renderCurrent(weather, location);
         renderHourly(weather);
         renderDaily(weather);
         updateLastRefresh();
         lastRefreshTime = Date.now();
-        console.log('[' + new Date().toLocaleTimeString('zh-CN') + '] 天气数据已刷新');
     } catch (err) {
         console.error('刷新失败:', err);
-        showToast('刷新失败，将在下次重试');
     }
 }
 
@@ -412,23 +345,10 @@ function updateLastRefresh() {
 }
 
 /* ========================================
-   启动 & 定时刷新
+   启动 & 每小时刷新（无视觉动画）
    ======================================== */
-// 时钟 - 每秒更新
-setInterval(updateClock, 1000);
-updateClock();
-
-// 太阳位置 - 每分钟更新
-setInterval(() => {
-    if (cachedSunrise && cachedSunset) {
-        updateSunArc(cachedSunrise, cachedSunset);
-    }
-}, 60000);
-
-// 天气数据 - 每小时刷新
-setInterval(() => {
-    refresh();
-}, REFRESH_INTERVAL);
+// 天气数据每小时刷新一次（静默后台刷新，无动画）
+setInterval(refresh, REFRESH_INTERVAL);
 
 // 页面重新可见时检查是否需要刷新
 document.addEventListener('visibilitychange', () => {
