@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天气 · Hourly Weather</title>
+    <meta name="description" content="基于IP定位的实时天气与未来七天预报">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⛅</text></svg>">
+</head>
+<body>
+    <!-- 动态背景层 -->
+    <div class="bg-layer" id="bgLayer">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+        <div class="bg-noise"></div>
+    </div>
+
+    <!-- 加载状态 -->
+    <div class="loader" id="loader">
+        <div class="loader-icon">
+            <svg viewBox="0 0 48 48" width="48" height="48">
+                <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
+                <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="3" stroke-linecap="round" stroke-dasharray="90 200" class="loader-spin"/>
+            </svg>
+        </div>
+        <p class="loader-text">正在获取天气数据…</p>
+    </div>
+
+    <!-- 主容器 -->
+    <main class="container" id="container" style="display:none;">
+
+        <!-- 顶部导航 -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <span class="location-pin">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </span>
+                <div>
+                    <h1 class="location-name" id="locationName">—</h1>
+                    <p class="location-meta" id="locationMeta">基于IP定位</p>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <div class="clock" id="clock">--:--</div>
+                <div class="refresh-info">
+                    <span class="pulse-dot" id="pulseDot"></span>
+                    <span id="lastUpdate">等待数据</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- 当前天气英雄区 -->
+        <section class="hero" id="hero">
+            <div class="hero-main">
+                <div class="hero-icon" id="heroIcon"></div>
+                <div class="hero-temp">
+                    <span class="temp-value" id="currentTemp">--</span>
+                    <span class="temp-unit">°</span>
+                </div>
+            </div>
+            <div class="hero-desc">
+                <p class="weather-label" id="weatherLabel">—</p>
+                <p class="feels-like">体感 <span id="feelsLike">--</span>°</p>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-chip">
+                    <span class="stat-icon">💧</span>
+                    <div>
+                        <span class="stat-value" id="humidity">--</span>
+                        <span class="stat-label">湿度</span>
+                    </div>
+                </div>
+                <div class="stat-chip">
+                    <span class="stat-icon">🌬️</span>
+                    <div>
+                        <span class="stat-value" id="windSpeed">--</span>
+                        <span class="stat-label">风速 km/h</span>
+                    </div>
+                </div>
+                <div class="stat-chip">
+                    <span class="stat-icon">🧭</span>
+                    <div>
+                        <span class="stat-value" id="windDir">--</span>
+                        <span class="stat-label">风向</span>
+                    </div>
+                </div>
+                <div class="stat-chip">
+                    <span class="stat-icon">☀️</span>
+                    <div>
+                        <span class="stat-value" id="uvIndex">--</span>
+                        <span class="stat-label">紫外线</span>
+                    </div>
+                </div>
+                <div class="stat-chip">
+                    <span class="stat-icon">📊</span>
+                    <div>
+                        <span class="stat-value" id="pressure">--</span>
+                        <span class="stat-label">气压 hPa</span>
+                    </div>
+                </div>
+                <div class="stat-chip">
+                    <span class="stat-icon">🌧️</span>
+                    <div>
+                        <span class="stat-value" id="precip">--</span>
+                        <span class="stat-label">降水 mm</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 逐小时预报 -->
+        <section class="section-block">
+            <div class="section-header">
+                <h2 class="section-title">逐小时预报</h2>
+                <span class="section-sub">未来 24 小时</span>
+            </div>
+            <div class="hourly-scroll" id="hourlyScroll">
+                <div class="hourly-track" id="hourlyTrack"></div>
+            </div>
+        </section>
+
+        <!-- 七天预报 -->
+        <section class="section-block">
+            <div class="section-header">
+                <h2 class="section-title">七天预报</h2>
+                <span class="section-sub">每日天气趋势</span>
+            </div>
+            <div class="daily-grid" id="dailyGrid"></div>
+        </section>
+
+        <!-- 日出日落 -->
+        <section class="sun-section" id="sunSection">
+            <div class="sun-card">
+                <div class="sun-info">
+                    <div class="sun-item">
+                        <span class="sun-icon">🌅</span>
+                        <div>
+                            <span class="sun-label">日出</span>
+                            <span class="sun-time" id="sunrise">--:--</span>
+                        </div>
+                    </div>
+                    <div class="sun-item">
+                        <span class="sun-icon">🌇</span>
+                        <div>
+                            <span class="sun-label">日落</span>
+                            <span class="sun-time" id="sunset">--:--</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="sun-arc">
+                    <svg viewBox="0 0 300 100" class="sun-arc-svg" id="sunArcSvg">
+                        <path d="M 20 90 Q 150 -20 280 90" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-dasharray="4 4"/>
+                        <circle id="sunPosition" cx="150" cy="10" r="6" fill="#FFD93D" filter="url(#sunGlow)"/>
+                        <defs>
+                            <filter id="sunGlow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p>天气数据由 <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo</a> 提供 · 每小时自动更新</p>
+            <p class="footer-note">定位服务由 ipapi.co 提供 · 仅供参考</p>
+        </footer>
+    </main>
+
+    <!-- 错误提示 -->
+    <div class="error-toast" id="errorToast" style="display:none;">
+        <span id="errorText"></span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
