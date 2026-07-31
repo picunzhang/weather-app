@@ -367,28 +367,10 @@ body {
 
 /* ===== 逐小时预报 ===== */
 .hourly-scroll {
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.15) transparent;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 4px;
+    overflow: hidden;
     flex: 1;
     display: flex;
     align-items: stretch;
-}
-
-.hourly-scroll::-webkit-scrollbar {
-    height: 4px;
-}
-
-.hourly-scroll::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.hourly-scroll::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.12);
-    border-radius: 3px;
 }
 
 .hourly-track {
@@ -458,15 +440,7 @@ body {
     gap: 10px;
     flex: 1;
     min-height: 0;
-}
-
-.daily-grid::-webkit-scrollbar {
-    width: 4px;
-}
-
-.daily-grid::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.12);
-    border-radius: 3px;
+    overflow: hidden;
 }
 
 .daily-card {
